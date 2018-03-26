@@ -1,5 +1,6 @@
 #include "PointGreyInference.h"
 #include "test_utils.cpp"
+#include "RollingDisplay.h"
 
 
 int main()

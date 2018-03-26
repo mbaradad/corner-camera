@@ -1,5 +1,4 @@
 #include "WebCamInference.h"
-#include "RollingDisplay.h"
 
 
 WebCamInference::WebCamInference(int nangles, int ncircles,

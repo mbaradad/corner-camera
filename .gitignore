@@ -57,3 +57,6 @@
 *.exe
 *.out
 *.app
+
+#Intellij
+.idea

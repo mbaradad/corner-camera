@@ -3,6 +3,7 @@
 
 
 #include "Inference.h"
+#include "RollingDisplay.h"
 
 
 

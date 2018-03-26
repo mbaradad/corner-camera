@@ -17,16 +17,14 @@ target_link_libraries( test_infer_funcs Infer ${OpenCV_LIBS} )
 add_executable( test_webcam_infer test_webcam_infer.cpp )
 target_link_libraries( test_webcam_infer Infer ${OpenCV_LIBS} )
 
-#[[
 add_executable( test_pointgrey test_pointgrey.cpp )
 target_link_libraries( test_pointgrey Infer ${OpenCV_LIBS} ${FLYCAPTURE} )
 
 add_executable( test_pointgrey_infer test_pointgrey_infer.cpp )
 target_link_libraries( test_pointgrey_infer Infer ${OpenCV_LIBS} ${FLYCAPTURE} )
-]]
 
-if (FLYCAPTURE_FOUND)
-  include_directories(${FLYCAPTURE_INCLUDE_DIRS})
-  target_link_libraries (test_pointgrey ${FLYCAPTURE_LIBRARIES})
-  target_link_libraries (test_pointgrey_infer ${FLYCAPTURE_LIBRARIES})
-endif (FLYCAPTURE_FOUND)
+#if (FLYCAPTURE_FOUND)
+include_directories(${FLYCAPTURE_INCLUDE_DIRS})
+target_link_libraries (test_pointgrey ${FLYCAPTURE_LIBRARIES})
+target_link_libraries (test_pointgrey_infer ${FLYCAPTURE_LIBRARIES})
+#endif (FLYCAPTURE_FOUND)

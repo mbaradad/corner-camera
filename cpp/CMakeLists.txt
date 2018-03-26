@@ -6,7 +6,9 @@ find_package( OpenCV 3 REQUIRED )
 include_directories( ${OpenCV_INCLUDE_DIRS} )
 
 # Find the flycapture2 library from Point Grey
-#include_directories("/usr/include/flycapture")
-#find_library(FLYCAPTURE flycapture)
+#can be downloaded and installed from:
+#https://github.com/RhobanDeps/flycapture
+include_directories("/usr/include/flycapture")
+find_library(FLYCAPTURE flycapture)
 
 subdirs( src demo tests scratch )

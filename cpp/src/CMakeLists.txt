@@ -7,5 +7,5 @@ add_library(Infer
 	Inference.cpp
 	VideoInference.cpp
 	WebCamInference.cpp
-	#PointGreyInference.cpp
+	PointGreyInference.cpp
 )

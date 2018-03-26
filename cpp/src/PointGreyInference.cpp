@@ -1,4 +1,5 @@
 #include "PointGreyInference.h"
+#include "RollingDisplay.h"
 
 
 PointGreyInference::PointGreyInference( int nangles, int ncirlces,
