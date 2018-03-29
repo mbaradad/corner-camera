@@ -87,7 +87,7 @@ void PointGreyInference::processStream(bool disp_rollup)
 
   plotObsXYLocs("sample locations");
 
-  display = RollingDisplay("output", disp_rollup, nangles_);
+  RollingDisplay display = RollingDisplay("output", disp_rollup, nangles_);
   cv::Mat cur_disp;
 
   cv::namedWindow("camera", CV_WINDOW_NORMAL);

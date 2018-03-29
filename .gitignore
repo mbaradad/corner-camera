@@ -60,3 +60,6 @@
 
 #Intellij
 .idea
+
+#data
+*/data/*

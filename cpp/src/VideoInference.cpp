@@ -78,6 +78,7 @@ void VideoInference::processVideo(std::string vidname,
 
   cv::namedWindow("input", CV_WINDOW_NORMAL);
   cv::namedWindow("background image", CV_WINDOW_NORMAL);
+  cv::namedWindow("diff_image", CV_WINDOW_NORMAL);
 
   int i;
   int nframes = (end_f - start_f)/step + 1;
@@ -94,6 +95,11 @@ void VideoInference::processVideo(std::string vidname,
     preprocessFrame();
 
     cur_disp = display.nextrow();
+
+    cv::Mat dst_norm;
+    cv::normalize(dframe_ - backim_,dst_norm,0,255,cv::NORM_MINMAX);
+    cv::imshow("diff_image", dst_norm/255);
+
     processFrame(cur_disp);
 
     cur_disp = (cur_disp + 0.05) / 0.1;

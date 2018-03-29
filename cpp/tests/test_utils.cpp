@@ -53,7 +53,7 @@ std::string loadTestVidInfo(int testvid, cv::Point& corner,
       std::runtime_error("choose another test video");
   }
 
-  std::string datadir = "/Users/vickieye/Dropbox (MIT)/shadowImaging/edgeImaging/data/";
+  std::string datadir = "/mnt/sdb1/Drobpox_mit/Dropbox/shadowImaging/edgeImaging/data/";
   std::string expdir = datadir + expname + "/experiments/";
   std::string srcfile = expdir + vidname + vidtype;
 

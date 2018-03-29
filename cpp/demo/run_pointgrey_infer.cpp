@@ -4,12 +4,12 @@
 
 int main(int argc, char* argv[])
 {
-  std::string cfile;
+  std::string fname;
   if (argc < 2) {
     printf("No config file, using default inference parameters\n");
-    cfile = "";
+    fname = "";
   } else {
-    cfile = std::string(argv[1]);
+    fname = std::string(argv[1]);
   }
   ConfigParser config(fname);
 
