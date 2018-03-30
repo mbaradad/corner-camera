@@ -1,6 +1,5 @@
 #include "Inference.h"
 
-
 Inference::Inference(int nangles, int ncircles,
     float rstep, double lambda, double beta, double alpha)
 {
@@ -141,7 +140,6 @@ void Inference::updateMeanImage(int total)
   if (total == 1) {
     dframe_.copyTo(backim_);
   } else {
-//    backim_ = backim_ * (total-1) / total + dframe_ / total;
     backim_ = alpha_ * backim_ + (1 - alpha_) * dframe_;
   }
   meanpx_ = cv::mean(backim_);
@@ -217,7 +215,10 @@ void Inference::plotObsXYLocs(std::string winname)
 {
   cv::namedWindow(winname, CV_WINDOW_NORMAL);
   cv::Mat samples;
-  dframe_.convertTo(samples, CV_8UC3);
+  cv::Mat dst_norm;
+  cv::normalize(dframe_,dst_norm,0.0,1.0,cv::NORM_MINMAX);
+  dst_norm = dst_norm * 255;
+  dst_norm.convertTo(samples, CV_8UC3);
   cv::imshow(winname, samples);
 
   cv::circle(samples, cv::Point((corner_x_ - xmin_)/(1<<downlevs_),

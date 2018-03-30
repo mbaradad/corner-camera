@@ -3,7 +3,6 @@
 #include <algorithm>
 #include <exception>
 
-
 RollingDisplay::RollingDisplay(std::string name, bool roll_up,
     int ncols, int buf_factor)
 {
@@ -16,7 +15,7 @@ RollingDisplay::RollingDisplay(std::string name, bool roll_up,
   ncols_ = ncols;
 
   bufsize_ = nrows_ * buf_factor;
-  buffer_ = cv::Mat(bufsize_, ncols_, CV_64FC3);
+  buffer_ = cv::Mat::zeros(bufsize_, ncols_, CV_64FC3);
   cv::namedWindow(name_, CV_WINDOW_NORMAL);
 
   dstart_ = 0;
@@ -37,6 +36,7 @@ RollingDisplay::RollingDisplay(std::string name, bool roll_up,
 
   bufsize_ = nrows_ * buf_factor;
   buffer_ = cv::Mat(bufsize_, ncols_, CV_64FC3);
+  buffer_ = buffer_*0;
   cv::namedWindow(name_, CV_WINDOW_NORMAL);
 
   dstart_ = 0;
@@ -61,7 +61,9 @@ void RollingDisplay::update()
   } else {
     disp_ = buffer_.rowRange(dstart_, dstart_ + nrows_);
   }
-  cv::imshow(name_, disp_);
+  cv::Mat dst_norm;
+  cv::normalize(disp_,dst_norm,0.0,1.0,cv::NORM_MINMAX);
+  cv::imshow(name_, dst_norm);
 }
 
 

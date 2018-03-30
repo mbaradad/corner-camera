@@ -7,6 +7,7 @@ CalibrationWindow::CalibrationWindow(std::string win_name,
   name_ = win_name;
   cv::resize(cal_image, disp_image_, cv::Size(),
       0.5, 0.5, CV_INTER_AREA);
+  disp_image_ = disp_image_;
   resize_fx_ = (float) cal_image.cols / disp_image_.cols;
   resize_fy_ = (float) cal_image.rows / disp_image_.rows;
 

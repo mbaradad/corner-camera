@@ -96,16 +96,17 @@ void VideoInference::processVideo(std::string vidname,
 
     cur_disp = display.nextrow();
 
-    cv::Mat dst_norm;
-    cv::normalize(dframe_ - backim_,dst_norm,0,255,cv::NORM_MINMAX);
-    cv::imshow("diff_image", dst_norm/255);
-
     processFrame(cur_disp);
 
     cur_disp = (cur_disp + 0.05) / 0.1;
 
-    cv::imshow("input", dframe_/255);
-    cv::imshow("background image", backim_/255);
+    cv::Mat dst_norm;
+    cv::normalize(dframe_,dst_norm,0.0,1.0,cv::NORM_MINMAX);
+    cv::imshow("input", dst_norm);
+    cv::normalize(backim_,dst_norm,0.0,1.0,cv::NORM_MINMAX);
+    cv::imshow("background image", dst_norm);
+    cv::normalize((dframe_ - backim_),dst_norm,0.0,1.0,cv::NORM_MINMAX);
+    cv::imshow("diff_image", dst_norm);
 
     display.update();
     if (cv::waitKey(1) == 27) {
