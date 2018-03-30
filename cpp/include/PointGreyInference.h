@@ -10,8 +10,9 @@ class PointGreyInference : public Inference
 {
   public:
     PointGreyInference(int nangles, int ncirlces, float rstep,
-        double lambda, double beta, double alpha, double fps,
-                       bool precomputeBackground, int precomputeBackgroundIterations);
+        double lambda, double beta, double alpha, double fps, bool precomputeBackground, int precomputeBackgroundIterations);
+    PointGreyInference(int nangles, int ncirlces, float rstep,
+                       double lambda, double beta, double alpha, double fps);
     PointGreyInference(cv::Point corner,
         cv::Point wallpt, cv::Point endpt,
         int nangles, int ncirlces, float rstep,

@@ -29,7 +29,7 @@ int main(int argc, char* argv[])
       (float) config.getNumericParam("rstep"),
       config.getNumericParam("lambda"),
       config.getNumericParam("beta"),
-      config.getNumericParam("alpha"));
+      config.getNumericParam("alpha"),10);
 
   pginf.processStream((bool) config.getNumericParam("disp_rollup"));
 

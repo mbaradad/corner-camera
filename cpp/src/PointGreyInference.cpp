@@ -18,7 +18,6 @@ void printMinMax(const cv::Mat& m){
   std::cout << "max val: " << maxVal << std::endl;
 }
 
-
 void PointGreyInference::printConfig(FlyCapture2::Camera *cam){
   std::cout << "BRIGHTNESS: " << getProperty(cam,FlyCapture2::BRIGHTNESS) << std::endl;
   std::cout << "AUTO_EXPOSURE: " << getProperty(cam, FlyCapture2::AUTO_EXPOSURE) << std::endl;
@@ -50,6 +49,14 @@ PointGreyInference::PointGreyInference( int nangles, int ncirlces,
   precomputeBackgroundIterations_ = precomputeBackgroundIterations;
 }
 
+PointGreyInference::PointGreyInference( int nangles, int ncirlces,
+                                        float rstep, double lambda, double beta, double alpha, double fps)
+    : Inference(nangles, ncirlces, rstep, lambda, beta, alpha)
+{
+  fps_ = fps;
+  precomputeBackground_ = false;
+  precomputeBackgroundIterations_ = -1;
+}
 
 PointGreyInference::PointGreyInference(cv::Point corner,
     cv::Point wallpt, cv::Point endpt,

@@ -13,11 +13,11 @@ int main()
       corner, wallpt, endpt, angle);
 
   int nangles = 200;
-  int ncircles = 15;
-  float rstep = 10;
+  int ncircles = 100;
+  float rstep = 1;
   double lambda = 50;
   double beta = 1/(0.2*0.2);
-  double alpha = 3.0/4;
+  double alpha = 0.99;//3.0/4;
 
   VideoInference vinf(corner, wallpt, endpt,
       nangles, ncircles, rstep, lambda, beta, alpha);
