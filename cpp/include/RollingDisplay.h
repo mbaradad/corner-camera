@@ -18,6 +18,7 @@ class RollingDisplay
 
     cv::Mat nextrow();
     void update();
+    void update(float min_threshold, float max_threshold);
 
     std::string name() { return name_; }
     int nrows() { return nrows_; }

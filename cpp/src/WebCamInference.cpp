@@ -43,7 +43,7 @@ void WebCamInference::processStream(int devid, bool disp_rollup)
     }
     cv::resize(frame, dst, cv::Size(), 0.5, 0.5, CV_INTER_AREA);
     cv::putText(dst, "Adjust camera, ESC to proceed.",
-        cv::Point(30, 30), CV_FONT_HERSHEY_PLAIN, 2,
+        cv::Point(30, 30), CV_FONT_HERSHEY_PLAIN, 1,
         CV_RGB(50, 50, 250), 2);
     cv::imshow("camera adjustment", dst);
     if (cv::waitKey(1) == 27) {
@@ -72,7 +72,6 @@ void WebCamInference::processStream(int devid, bool disp_rollup)
   RollingDisplay display("output", disp_rollup, nangles_);
   cv::Mat cur_disp, backdisp, camdisp;
 
-  cv::namedWindow("webcam", CV_WINDOW_NORMAL);
   cv::namedWindow("background image", CV_WINDOW_NORMAL);
 
   printf("Starting inference, press esc to stop\n");
@@ -89,8 +88,13 @@ void WebCamInference::processStream(int devid, bool disp_rollup)
     cv::resize(dframe_, camdisp, cv::Size(), 2, 2);
     cv::resize(backim_, backdisp, cv::Size(), 2, 2);
 
-    cv::imshow("webcam", camdisp/255);
-    cv::imshow("background image", backdisp/255);
+    cv::Mat dst_norm;
+    cv::normalize(dframe_,dst_norm,0.0,1.0,cv::NORM_MINMAX);
+    cv::imshow("input", dst_norm);
+    cv::normalize(backim_,dst_norm,0.0,1.0,cv::NORM_MINMAX);
+    cv::imshow("background image", dst_norm);
+    cv::normalize((dframe_ - backim_),dst_norm,0.0,1.0,cv::NORM_MINMAX);
+    cv::imshow("diff_image", dst_norm);
 
     display.update();
     if (cv::waitKey(1) == 27) {

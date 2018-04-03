@@ -9,11 +9,11 @@ int main()
   cv::Point wallpt = cv::Point(330, 230);
   cv::Point endpt = cv::Point(100, 100);
   int nangles = 100;
-  int ncircles = 10;
-  float rstep = 5;
+  int ncircles = 30;
+  float rstep = 10;
   double lambda = 7;
   double beta = 100;
-  double alpha = 3.0/4;
+  double alpha = 0.95;//3.0/4;
 
   WebCamInference webinf(nangles, ncircles,
       rstep, lambda, beta, alpha);

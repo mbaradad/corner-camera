@@ -19,8 +19,8 @@ int main()
    */
 
   int nangles = 100;
-  int ncircles = 300;
-  float rstep = 1;
+  int ncircles = 30;
+  float rstep = 20;
   //lambda and beta are gain mat parameters
   double lambda = 7;
   double beta = 100;
@@ -32,8 +32,13 @@ int main()
   bool precompute_background = false;
   int precomputed_background_iterations = 100;
 
+  bool threshold_normalization = true;
+  float threshold_min = -0.001;
+  float threshold_max = 0.001;
   PointGreyInference pginf(nangles, ncircles,
-      rstep, lambda, beta, alpha, fps, precompute_background, precomputed_background_iterations);
+      rstep, lambda, beta, alpha, fps,
+                           precompute_background, precomputed_background_iterations,
+                           threshold_normalization, threshold_min, threshold_max);
 
   pginf.processStream(0);
   

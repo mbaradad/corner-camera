@@ -2,6 +2,24 @@
 
 #include <algorithm>
 #include <exception>
+#include <opencv2/imgproc/imgproc.hpp>
+
+void printMinMax(const cv::Mat& m){
+  double minVal;
+  double maxVal;
+  cv::Point minLoc;
+  cv::Point maxLoc;
+
+  std::vector<cv::Mat> channels(3);
+// split img:
+  split(m, channels);
+// get the channels (dont forget they follow BGR order in OpenCV)
+
+  cv::minMaxLoc( channels[0], &minVal, &maxVal, &minLoc, &maxLoc);
+
+  std::cout << "min val : " << minVal << std::endl;
+  std::cout << "max val: " << maxVal << std::endl;
+}
 
 RollingDisplay::RollingDisplay(std::string name, bool roll_up,
     int ncols, int buf_factor)
@@ -66,6 +84,27 @@ void RollingDisplay::update()
   cv::imshow(name_, dst_norm);
 }
 
+void RollingDisplay::update(float min_threshold, float max_threshold)
+{
+  if (roll_up_) {
+    cv::flip(buffer_.rowRange(dstart_, dstart_ + nrows_), disp_, 0);
+  } else {
+    disp_ = buffer_.rowRange(dstart_, dstart_ + nrows_);
+  }
+  std::cout << " begin rolling" << std::endl;
+  cv::Mat dst_norm_1;
+  printMinMax(disp_);
+  cv::threshold(-1*disp_,dst_norm_1,-1*min_threshold,-1*min_threshold,cv::THRESH_TRUNC);
+  printMinMax(dst_norm_1);
+  cv::Mat dst_norm_2;
+  cv::threshold(-1*dst_norm_1,dst_norm_2,max_threshold,max_threshold,cv::THRESH_TRUNC);
+  printMinMax(dst_norm_2);
+  cv::Mat dst_norm;
+  dst_norm = (dst_norm_2 - min_threshold)/(max_threshold - min_threshold);
+  printMinMax(dst_norm);
+  std::cout << " begin rolling" << std::endl;
+  cv::imshow(name_, dst_norm);
+}
 
 void RollingDisplay::wrapAround()
 { // copy the last nrows_ - 1 rows to the beginning and update drow

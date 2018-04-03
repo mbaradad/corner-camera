@@ -1,23 +1,6 @@
 #include "PointGreyInference.h"
 #include "RollingDisplay.h"
 
-void printMinMax(const cv::Mat& m){
-  double minVal;
-  double maxVal;
-  cv::Point minLoc;
-  cv::Point maxLoc;
-
-  std::vector<cv::Mat> channels(3);
-// split img:
-  split(m, channels);
-// get the channels (dont forget they follow BGR order in OpenCV)
-
-  cv::minMaxLoc( channels[0], &minVal, &maxVal, &minLoc, &maxLoc);
-
-  std::cout << "min val : " << minVal << std::endl;
-  std::cout << "max val: " << maxVal << std::endl;
-}
-
 void PointGreyInference::printConfig(FlyCapture2::Camera *cam){
   std::cout << "BRIGHTNESS: " << getProperty(cam,FlyCapture2::BRIGHTNESS) << std::endl;
   std::cout << "AUTO_EXPOSURE: " << getProperty(cam, FlyCapture2::AUTO_EXPOSURE) << std::endl;
@@ -41,12 +24,16 @@ void PointGreyInference::printConfig(FlyCapture2::Camera *cam){
 
 PointGreyInference::PointGreyInference( int nangles, int ncirlces,
     float rstep, double lambda, double beta, double alpha, double fps,
-    bool precomputeBackground, int precomputeBackgroundIterations)
+    bool precomputeBackground, int precomputeBackgroundIterations,
+                                        bool threshold_normalization, float threshold_min, float threshold_max)
   : Inference(nangles, ncirlces, rstep, lambda, beta, alpha)
 {
   fps_ = fps;
   precomputeBackground_ = precomputeBackground;
   precomputeBackgroundIterations_ = precomputeBackgroundIterations;
+  threshold_normalization_ = threshold_normalization;
+  threshold_min_ = threshold_min;
+  threshold_max_ = threshold_max;
 }
 
 PointGreyInference::PointGreyInference( int nangles, int ncirlces,
@@ -56,6 +43,8 @@ PointGreyInference::PointGreyInference( int nangles, int ncirlces,
   fps_ = fps;
   precomputeBackground_ = false;
   precomputeBackgroundIterations_ = -1;
+  threshold_normalization_ = false;
+
 }
 
 PointGreyInference::PointGreyInference(cv::Point corner,
@@ -69,6 +58,7 @@ PointGreyInference::PointGreyInference(cv::Point corner,
   fps_ = fps;
   precomputeBackground_ = precomputeBackground;
   precomputeBackgroundIterations_ = precomputeBackgroundIterations;
+  threshold_normalization_ = false;
 }
 
 
@@ -151,13 +141,14 @@ void PointGreyInference::processStream(bool disp_rollup)
   if (error == FlyCapture2::PGRERROR_ISOCH_BANDWIDTH_EXCEEDED) {
     throw std::runtime_error("Bandwidth exceeded");
   } else if (error != FlyCapture2::PGRERROR_OK) {
-    throw std::runtime_error("Failed to start image capture");
+    throw std::runtime_error("Failed to start image capture. Mabe run make_grasshopper_work?");
   }
   cameraFps_ = getProperty(&cam,FlyCapture2::FRAME_RATE);
 
   // get frame info, setup, and initialize running mean
+  printConfig(&cam);
   getNextFrame(&cam);
-  //printConfig(&cam);
+  printConfig(&cam);
 
   nrows_ = frame_.rows;
   ncols_ = frame_.cols;
@@ -199,7 +190,10 @@ void PointGreyInference::processStream(bool disp_rollup)
     cv::normalize((dframe_ - backim_),dst_norm,0.0,1.0,cv::NORM_MINMAX);
     cv::imshow("diff_image", dst_norm);
 
-    display.update();
+    if (threshold_normalization_)
+      display.update(threshold_min_, threshold_max_);
+    else
+      display.update();
     if (cv::waitKey(1) == 27) {
       printf("pressed ESC key, exiting inference\n");
       break;
