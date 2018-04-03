@@ -32,7 +32,8 @@ class PointGreyInference : public Inference
     void setExposure(FlyCapture2::Camera *cam, float ss);
     void setGain(FlyCapture2::Camera *cam, float ss);
     void setFPS(FlyCapture2::Camera *cam, float ss);
-    void autoAdjustProperty(FlyCapture2::Camera *cam, FlyCapture2::PropertyType propType);
+    void enableAutoAdjustProperty(FlyCapture2::Camera *cam, FlyCapture2::PropertyType propType);
+    void disableAutoAdjustProperty(FlyCapture2::Camera *cam, FlyCapture2::PropertyType propType);
     void setOff(FlyCapture2::Camera *cam, FlyCapture2::PropertyType propType);
     void setOn(FlyCapture2::Camera *cam, FlyCapture2::PropertyType propType);
 

@@ -127,15 +127,14 @@ void PointGreyInference::processStream(bool disp_rollup)
     error.PrintErrorTrace();
   }
   cameraFps_ = fps_;
-  setProperty(&cam,FlyCapture2::FRAME_RATE, cameraFps_);
-  setProperty(&cam, FlyCapture2::GAMMA, 1);
-  autoAdjustProperty(&cam, FlyCapture2::GAIN);
-  autoAdjustProperty(&cam, FlyCapture2::SHUTTER);
-  //autoAdjustProperty(&cam, FlyCapture2::TEMPERATURE);
-  //autoAdjustProperty(&cam, FlyCapture2::AUTO_EXPOSURE);
-  //setProperty(&cam, FlyCapture2::AUTO_EXPOSURE, 1);
-  setOff(&cam, FlyCapture2::AUTO_EXPOSURE);
-  setOff(&cam, FlyCapture2::GAMMA);
+
+  enableAutoAdjustProperty(&cam, FlyCapture2::GAIN);
+  enableAutoAdjustProperty(&cam, FlyCapture2::SHUTTER);
+  enableAutoAdjustProperty(&cam, FlyCapture2::TEMPERATURE);
+  setFPS(&cam, fps_);
+  disableAutoAdjustProperty(&cam, FlyCapture2::GAIN);
+  disableAutoAdjustProperty(&cam, FlyCapture2::SHUTTER);
+  disableAutoAdjustProperty(&cam, FlyCapture2::TEMPERATURE);
 
   error = cam.StartCapture();
   if (error == FlyCapture2::PGRERROR_ISOCH_BANDWIDTH_EXCEEDED) {
@@ -176,8 +175,8 @@ void PointGreyInference::processStream(bool disp_rollup)
 
   int total = 0;
   while (1) {
+    printConfig(&cam);
     getNextFrame(&cam);
-    //printConfig(&cam);
     preprocessFrame();
     cur_disp = display.nextrow();
     processFrame(cur_disp);
@@ -298,7 +297,8 @@ void PointGreyInference::setFPS(FlyCapture2::Camera *cam, float ss)
 }
 
 
-void PointGreyInference::autoAdjustProperty(FlyCapture2::Camera *cam,
+
+void PointGreyInference::enableAutoAdjustProperty(FlyCapture2::Camera *cam,
     FlyCapture2::PropertyType propType)
 {
   FlyCapture2::Property prop;
@@ -308,6 +308,24 @@ void PointGreyInference::autoAdjustProperty(FlyCapture2::Camera *cam,
     error.PrintErrorTrace();
   }
 
+  prop.autoManualMode = true;
+  prop.absControl = true;
+  prop.onePush = true;
+  error = cam->SetProperty(&prop);
+  if (error != FlyCapture2::PGRERROR_OK) {
+    error.PrintErrorTrace();
+  }
+}
+
+void PointGreyInference::disableAutoAdjustProperty(FlyCapture2::Camera *cam,
+                                            FlyCapture2::PropertyType propType)
+{
+  FlyCapture2::Property prop;
+  prop.type = propType;
+  FlyCapture2::Error error = cam->GetProperty(&prop);
+  if (error != FlyCapture2::PGRERROR_OK) {
+    error.PrintErrorTrace();
+  }
   prop.autoManualMode = false;
   prop.absControl = true;
   prop.onePush = true;
@@ -321,7 +339,6 @@ void PointGreyInference::autoAdjustProperty(FlyCapture2::Camera *cam,
 void PointGreyInference::setOnOff(FlyCapture2::Camera *cam,
                                FlyCapture2::PropertyType propType, bool onOff){
   FlyCapture2::Property prop;
-  prop.type = propType;
   FlyCapture2::Error error = cam->GetProperty(&prop);
   if (error != FlyCapture2::PGRERROR_OK) {
     error.PrintErrorTrace();

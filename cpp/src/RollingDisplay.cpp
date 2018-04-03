@@ -93,15 +93,11 @@ void RollingDisplay::update(float min_threshold, float max_threshold)
   }
   std::cout << " begin rolling" << std::endl;
   cv::Mat dst_norm_1;
-  printMinMax(disp_);
   cv::threshold(-1*disp_,dst_norm_1,-1*min_threshold,-1*min_threshold,cv::THRESH_TRUNC);
-  printMinMax(dst_norm_1);
   cv::Mat dst_norm_2;
   cv::threshold(-1*dst_norm_1,dst_norm_2,max_threshold,max_threshold,cv::THRESH_TRUNC);
-  printMinMax(dst_norm_2);
   cv::Mat dst_norm;
   dst_norm = (dst_norm_2 - min_threshold)/(max_threshold - min_threshold);
-  printMinMax(dst_norm);
   std::cout << " begin rolling" << std::endl;
   cv::imshow(name_, dst_norm);
 }
