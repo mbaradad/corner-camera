@@ -29,7 +29,8 @@ int main()
   double alpha = 3.0/4;
   double fps = 10;
 
-  bool precompute_background = true;
+  //If true, dont update running mean after precomputed_background_iterations
+  bool precompute_background = false;
   int precomputed_background_iterations = 200;
 
   bool threshold_normalization = true;
